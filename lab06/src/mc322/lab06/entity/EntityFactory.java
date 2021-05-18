@@ -5,30 +5,20 @@ import mc322.lab06.Cave;
 public class EntityFactory {
     private Cave cave;
 
-    public Entity getEntity(String entityType, int[] position) {
-        if (entityType == null) {
-            return null;
-        }
-        else if (entityType.equalsIgnoreCase("breeze")) {
-            return new Breeze(cave, position);
-        }
-        else if (entityType.equalsIgnoreCase("gold")) {
-            return new Gold(cave, position);
-        }
-        else if (entityType.equalsIgnoreCase("hero")) {
-            return new Hero(cave, position);
-        }
-        else if (entityType.equalsIgnoreCase("hole")) {
-            return new Hole(cave, position);
-        }
-        else if (entityType.equalsIgnoreCase("stink")) {
-            return new Stink(cave, position);
-        }
-        else if (entityType.equalsIgnoreCase("wumpus")) {
-            return new Wumpus(cave, position);
-        }
+    public EntityFactory(Cave cave) {
+        this.cave = cave;
+    }
 
-        return null;
+    public Entity getEntity(char entityType, int[] position) {
+        return switch (entityType) {
+            case 'b' -> new Breeze(cave, position);
+            case 'O' -> new Gold(cave, position);
+            case 'P' -> new Hero(cave, position);
+            case 'B' -> new Hole(cave, position);
+            case 'f' -> new Stink(cave, position);
+            case 'W' -> new Wumpus(cave, position);
+            default -> null;
+        };
     }
 
     public void setCave(Cave cave) {
