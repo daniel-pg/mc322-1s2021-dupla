@@ -2,7 +2,20 @@ package mc322.lab06.entity;
 
 import mc322.lab06.Cave;
 
-public class Entity {
+public abstract class Entity implements IEntity {
     private Cave cave;
     private int[] position;
+
+    Entity(Cave cave, int[] position) {
+        this.cave = cave;
+        this.position = position;
+    }
+
+    public int[] getPos() {
+        return this.position;
+    }
+
+    public void setPos(int[] position) {
+        this.position = position;
+    }
 }
