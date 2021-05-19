@@ -39,7 +39,7 @@ public class CaveFactory {
                 this.hero = (Hero) newEntity;
             }
 
-            newCave.addEntityToRoom(newEntity);
+            newCave.getRoom(newEntityCoord).addEntity(newEntity);
         }
 
         return newCave;

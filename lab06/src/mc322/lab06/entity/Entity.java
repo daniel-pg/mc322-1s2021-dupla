@@ -3,8 +3,8 @@ package mc322.lab06.entity;
 import mc322.lab06.Cave;
 
 public abstract class Entity implements IEntity {
-    private Cave cave;
-    private int[] position;
+    protected Cave cave;
+    protected int[] position;
 
     Entity(Cave cave, int[] position) {
         this.cave = cave;

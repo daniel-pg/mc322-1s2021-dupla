@@ -16,37 +16,36 @@ public class Cave {
         this.width = width;
     }
 
-    public void addEntityToRoom(Entity newEntity) {
-        int[] position = newEntity.getPos();
-        this.caveRooms[position[0]][position[1]].addEntity(newEntity);
+    public CaveRoom getRoom(int[] position) {
+        return this.caveRooms[position[0]][position[1]];
     }
 
-    public void display() {
+    public String[] getCaveMap() {
+        String[] lines = new String[height];
+        StringBuilder newLine = new StringBuilder();
+
         CaveRoom currentRoom;
 
         for (int i = 0; i < height; i++) {
-            System.out.println(i + 1); // Numeração das linhas
-
             for (int j = 0; j < width; j++) {
                 currentRoom = this.caveRooms[i][j];
-                System.out.println(" "); // Separador de símbolos
 
                 if (!currentRoom.isVisited()) {
-                    System.out.println("-");
-                }
-                else if (currentRoom.isEmpty()) {
-                    System.out.println("#");
-                }
-                else {
-                    System.out.println(this.caveRooms[i][j].toString());
+                    newLine.append("-");
+                } else if (currentRoom.isEmpty()) {
+                    newLine.append("#");
+                } else {
+                    newLine.append(currentRoom.toString());
                 }
             }
+            lines[i] = newLine.toString();
+            newLine.setLength(0);
         }
 
-        System.out.println(" ");
+        return lines;
+    }
 
-        for (int i = 0; i < width; i++) {
-            System.out.println(" " + (i + 1));
-        }
+    public int[] getCaveDimensions() {
+        return new int[]{height, width};
     }
 }

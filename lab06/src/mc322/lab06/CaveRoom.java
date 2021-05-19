@@ -2,23 +2,23 @@ package mc322.lab06;
 
 import mc322.lab06.entity.Entity;
 
-import java.util.HashSet;
+import java.util.HashMap;
 
 public class CaveRoom {
-    private HashSet<Entity> entities;
+    private final HashMap<String, Entity> entities;
     private boolean visited;
 
     public CaveRoom() {
-        this.entities = new HashSet<>();
+        this.entities = new HashMap<>();
         this.visited = false;
     }
 
-    public void addEntity(Entity newEntity) {
-        this.entities.add(newEntity);
+    public Entity addEntity(Entity newEntity) {
+        return this.entities.put(newEntity.toString(), newEntity);
     }
 
-    public void removeEntity(Entity newEntity) {
-        this.entities.remove(newEntity);
+    public Entity removeEntity(String entityType) {
+        return this.entities.remove(entityType);
     }
 
     public boolean isEmpty() {
