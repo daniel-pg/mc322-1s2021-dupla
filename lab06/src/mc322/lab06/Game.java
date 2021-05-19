@@ -54,7 +54,7 @@ public class Game {
      */
     private void executeCommand(char cmd) {
         switch (cmd) {
-            case 'w', 'a', 's', 'd':
+            case 'w', 'a', 's', 'd' -> {
                 this.score += hero.move(cmd);
 
                 // Herói morreu
@@ -67,21 +67,11 @@ public class Game {
                     this.score += 1000;
                     this.gameStatus = GameStatus.WIN;
                 }
-                break;
-
-            case 'k':
-                hero.engageBow();
-                break;
-
-            case 'c':
-                hero.captureGold();
-                break;
-
-            case 'q':
-                gameStatus = GameStatus.RESIGNED;
-                break;
-            default:
-                System.err.println("É uma anta quadrada mesmo! Não sabe ler a lista de comandos do jogo???");
+            }
+            case 'k' -> hero.engageBow();
+            case 'c' -> hero.captureGold();
+            case 'q' -> gameStatus = GameStatus.RESIGNED;
+            default -> System.err.println("É uma anta quadrada mesmo! Não sabe ler a lista de comandos do jogo???");
         }
     }
 }
