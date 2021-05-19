@@ -1,6 +1,7 @@
 package mc322.lab06;
 
 import mc322.lab06.entity.Entity;
+import mc322.lab06.entity.IGeneratorEntity;
 
 import java.util.HashMap;
 
@@ -14,7 +15,8 @@ public class CaveRoom {
     }
 
     public Entity addEntity(Entity newEntity) {
-        return this.entities.put(newEntity.toString(), newEntity);
+        Entity result = this.entities.put(newEntity.toString(), newEntity);
+        return result;
     }
 
     public Entity removeEntity(String entityType) {
@@ -33,13 +35,38 @@ public class CaveRoom {
         this.visited = true;
     }
 
+    public Entity getEntity(String entityType) {
+        return this.entities.get(entityType);
+    }
+
     public Entity getMaxPrintPriorityEntity () {
-        // TODO: Procura e retorna entidade de maior prioridade na sala
+        String[] searchKeys = new String[]{"O", "B", "W", "P", "f", "b"};
+        Entity result;
+
+        for (String key : searchKeys) {
+            result = this.entities.get(key);
+            if (result != null) {
+                return result;
+            }
+        }
+
         return null;
     }
 
     public String toString() {
-        // TODO: Retorna representação em string da entidade de maior prioridade
-        return "?";
+        Entity greatestPriority;
+
+        if (!this.isVisited()) {
+            return "-";
+        } else if (this.isEmpty()) {
+            return "#";
+        } else {
+            greatestPriority = getMaxPrintPriorityEntity();
+            if (greatestPriority != null) {
+                return greatestPriority.toString();
+            }
+        }
+
+        return "?"; // Algo de errado não está certo...
     }
 }

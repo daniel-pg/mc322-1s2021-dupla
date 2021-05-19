@@ -1,8 +1,6 @@
 package mc322.lab06;
 
-import mc322.lab06.entity.Entity;
-import mc322.lab06.entity.EntityFactory;
-import mc322.lab06.entity.Hero;
+import mc322.lab06.entity.*;
 
 public class CaveFactory {
     private final String[][] commands;
@@ -22,9 +20,18 @@ public class CaveFactory {
         this.width = width;
     }
 
+    private static boolean validateEntityCount(int[] entityCount) {
+        return entityCount[0] >= 2 && entityCount[0] <= 3 &&
+                entityCount[1] == 1 &&
+                entityCount[2] == 1 &&
+                entityCount[3] == 1;
+    }
+
     public Cave getCave() {
         Cave newCave = new Cave(height, width);
         EntityFactory entityFactory = new EntityFactory(newCave);
+
+        int[] entityCount = new int[]{0,0,0,0}; // Buracos, Wumpus, Ouro, Herói
 
         Entity newEntity;
         char entityType;
@@ -35,8 +42,20 @@ public class CaveFactory {
             entityType = command[1].charAt(0);
             newEntity = entityFactory.getEntity(entityType, newEntityCoord);
 
-            if (entityType == 'P') {
-                this.hero = (Hero) newEntity;
+            switch (entityType) {
+                case 'B' -> {
+                    ((Hole) newEntity).generate();
+                    entityCount[0]++;
+                }
+                case 'W' -> {
+                    ((Wumpus) newEntity).generate();
+                    entityCount[1]++;
+                }
+                case 'O' -> entityCount[2]++;
+                case 'P' -> {
+                    this.hero = (Hero) newEntity;
+                    entityCount[3]++;
+                }
             }
 
             if (newEntity != null) {
@@ -44,7 +63,12 @@ public class CaveFactory {
             }
         }
 
-        return newCave;
+        if (validateEntityCount(entityCount)) {
+            return newCave;
+        } else {
+            System.err.println("Arquivo de entrada inválido!");
+            return null;
+        }
     }
 
     public Hero getHero() {

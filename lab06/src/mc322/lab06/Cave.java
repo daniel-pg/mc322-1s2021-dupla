@@ -25,8 +25,22 @@ public class Cave {
         caveRooms[0][0].setVisited(); // Casa inicial sempre visível
     }
 
+    private boolean validRoom(int[] position) {
+        int row = position[0],
+                col = position[1];
+        if (row >= 0 && row < this.height && col >= 0 && col < this.width) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public CaveRoom getRoom(int[] position) {
-        return this.caveRooms[position[0]][position[1]];
+        if (this.validRoom(position)) {
+            return this.caveRooms[position[0]][position[1]];
+        } else {
+            return null;
+        }
     }
 
     public String[] getCaveMap() {
@@ -38,14 +52,7 @@ public class Cave {
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 currentRoom = this.caveRooms[i][j];
-
-                if (!currentRoom.isVisited()) {
-                    newLine.append("-");
-                } else if (currentRoom.isEmpty()) {
-                    newLine.append("#");
-                } else {
-                    newLine.append(currentRoom.toString());
-                }
+                newLine.append(currentRoom.toString());
             }
             lines[i] = newLine.toString();
             newLine.setLength(0);

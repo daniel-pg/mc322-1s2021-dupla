@@ -1,13 +1,15 @@
 package mc322.lab06.entity;
 
 import mc322.lab06.Cave;
+import mc322.lab06.CaveRoom;
+
+import java.util.Random;
 
 public class Hero extends Entity implements IEntity {
     private int numberOfArrows;
     private boolean isDead;
     private boolean isBowEngaged;
     private boolean hasGold;
-    private boolean hasKilledWumpus;
 
     Hero(Cave cave, int[] position) {
         super(cave, position);
@@ -15,7 +17,6 @@ public class Hero extends Entity implements IEntity {
         this.isDead = false;
         this.isBowEngaged = false;
         this.hasGold = false;
-        this.hasKilledWumpus = false;
     }
 
     @Override
@@ -34,7 +35,7 @@ public class Hero extends Entity implements IEntity {
      * @param move Código do movimento
      * @return Verdadeiro se o movimento é válido; Falso caso contrário
      */
-    public boolean move(char move) {
+    public int move(char move) {
         int[] displacement;
 
         switch (move) {
@@ -48,33 +49,80 @@ public class Hero extends Entity implements IEntity {
         return move(displacement);
     }
 
-    private boolean move(int[] displacement) {
+    private int move(int[] displacement) {
+        int score = 0;
         if (displacement == null) {
-            return false;
+            return score;
         }
 
-        /* TODO: Tentar mover o herói se o movimento for válido. Também verifica se o herói caiu num buraco ou encontrou
-            o Wumpus (e se tem flecha equipada ou não). Se ele morrer no processo, atualiza estado. */
-        return false;
+        int[] targetPos = new int[2];
+        for (int i = 0; i < 2; i++) {
+            targetPos[i] = this.position[i] + displacement[i];
+        }
+
+        // Checa se o destino do herói é válido
+        if (this.cave.getRoom(targetPos) == null) {
+            return score;
+        }
+
+        // Penalidade correspondente ao movimento bem-sucedido
+        score -= 15;
+
+        // Remove herói da posição de origem
+        CaveRoom currentRoom = this.cave.getRoom(this.position);
+        currentRoom.removeEntity(this.toString());
+
+        // Adiciona herói à posição de destino
+        this.position = targetPos;
+        currentRoom = this.cave.getRoom(this.position);
+        currentRoom.addEntity(this);
+        currentRoom.setVisited();
+
+        // Interação com buracos
+        if (currentRoom.getEntity("B") != null) {
+            this.isDead = true;
+            currentRoom.removeEntity(this.toString());
+            score -= 1000;
+        }
+
+        // Interação com Wumpus
+        if (currentRoom.getEntity("W") != null) {
+            Random rand = new Random();
+            if (this.isBowEngaged && rand.nextInt(101) >= 50) {
+                currentRoom.removeEntity("W");
+                score += 500;
+            } else {
+                this.isDead = true;
+                score -= 1000;
+            }
+        }
+
+        // Atira quaisquer flechas equipadas
+        if (this.fireBow()) {
+            score -= 100;
+        }
+
+        return score;
     }
 
     public boolean isDead() {
         return isDead;
     }
 
-    public boolean isBowEngaged() {
-        return isBowEngaged;
-    }
-
     public void engageBow() {
-        isBowEngaged = true;
+        if (this.numberOfArrows > 0) {
+            isBowEngaged = true;
+        }
     }
 
-    private void fireBow() {
-        if (numberOfArrows > 0) {
+    private boolean fireBow() {
+        if (numberOfArrows > 0 && this.isBowEngaged) {
             numberOfArrows--;
             isBowEngaged = false;
+            return true;
         }
+
+        return false;
     }
 
     public void captureGold() {
@@ -85,10 +133,6 @@ public class Hero extends Entity implements IEntity {
 
     public boolean hasGold() {
         return hasGold;
-    }
-
-    public boolean hasKilledWumpus() {
-        return hasKilledWumpus;
     }
 
     public void displayMap() {
@@ -108,9 +152,10 @@ public class Hero extends Entity implements IEntity {
         }
 
         // Imprimir numeração das colunas na parte debaixo do tabuleiro.
-        System.out.println(" ");
+        System.out.print(" ");
         for (int i = 0; i < width; i++) {
-            System.out.println(" " + (i + 1));
+            System.out.print(" " + (i + 1));
         }
+        System.out.println();
     }
 }
