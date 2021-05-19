@@ -32,4 +32,14 @@ public class CaveRoom {
     public void setVisited() {
         this.visited = true;
     }
+
+    public Entity getMaxPrintPriorityEntity () {
+        // TODO: Procura e retorna entidade de maior prioridade na sala
+        return null;
+    }
+
+    public String toString() {
+        // TODO: Retorna representação em string da entidade de maior prioridade
+        return "?";
+    }
 }

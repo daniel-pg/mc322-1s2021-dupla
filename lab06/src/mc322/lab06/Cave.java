@@ -14,6 +14,15 @@ public class Cave {
         this.caveRooms = new CaveRoom[height][width];
         this.height = height;
         this.width = width;
+
+        // Inicializa cada sala individual
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                caveRooms[i][j] = new CaveRoom();
+            }
+        }
+
+        caveRooms[0][0].setVisited(); // Casa inicial sempre visível
     }
 
     public CaveRoom getRoom(int[] position) {

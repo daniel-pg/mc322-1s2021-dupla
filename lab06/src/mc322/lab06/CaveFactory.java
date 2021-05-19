@@ -39,7 +39,9 @@ public class CaveFactory {
                 this.hero = (Hero) newEntity;
             }
 
-            newCave.getRoom(newEntityCoord).addEntity(newEntity);
+            if (newEntity != null) {
+                newCave.getRoom(newEntityCoord).addEntity(newEntity);
+            }
         }
 
         return newCave;
@@ -53,8 +55,8 @@ public class CaveFactory {
         String[] splitCoordinates = encodedCoordinates.split(":");
 
         int[] coordinates = new int[2];
-        coordinates[0] = Integer.getInteger(splitCoordinates[0]) - 1;
-        coordinates[1] = Integer.getInteger(splitCoordinates[1]) - 1;
+        coordinates[0] = Integer.parseInt(splitCoordinates[0]) - 1;
+        coordinates[1] = Integer.parseInt(splitCoordinates[1]) - 1;
         return coordinates;
     }
 }

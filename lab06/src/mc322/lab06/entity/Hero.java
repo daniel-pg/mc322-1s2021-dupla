@@ -104,7 +104,7 @@ public class Hero extends Entity implements IEntity {
             for (int j = 0; j < width; j++) {
                 System.out.print(" " + caveMap[i].charAt(j));
             }
-            System.out.println("");
+            System.out.println();
         }
 
         // Imprimir numeração das colunas na parte debaixo do tabuleiro.
