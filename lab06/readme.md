@@ -1,8 +1,10 @@
 ## Arquivos Java do Jogo
 
 O caminho da classe contendo o método main() é mc322.lab06.AppMundoWumpus. Para executá-lo pela linha de comando, é necessário passar um argumento contendo o caminho do arquivo .csv especificando a configuração da caverna, conforme descrito na especificação da tarefa. Alguns exemplos desses arquivos CSV podem ser encontrados no diretório /data.
-> $ cd bin
-> $ java mc322.lab06.AppMundoWumpus <arquivo.csv>
+```
+$ cd bin
+$ java mc322.lab06.AppMundoWumpus <arquivo.csv>
+```
 Após executar o jogo, insira seu nome e execute os comandos digitando-os no terminal. O código-fonte de todas as classes pode ser encontrado [aqui](src/mc322/lab06).
 
 ## Destaques de Arquitetura
