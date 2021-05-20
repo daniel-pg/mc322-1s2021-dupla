@@ -3,8 +3,6 @@ package mc322.lab06.entity;
 import mc322.lab06.Cave;
 import mc322.lab06.CaveRoom;
 
-import java.util.Arrays;
-
 public class Hole extends Entity implements IGeneratorEntity {
 
     Hole(Cave cave, int[] position) {
@@ -21,6 +19,9 @@ public class Hole extends Entity implements IGeneratorEntity {
         return "B";
     }
 
+    /**
+     * Se possível, gera quatro objetos Breeze nas quatro direções cardinais adjacentes na caverna
+     */
     @Override
     public void generate() {
         int[][] displacement = new int[][]{

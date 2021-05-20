@@ -2,6 +2,9 @@ package mc322.lab06.entity;
 
 import mc322.lab06.Cave;
 
+/**
+ * Entidade gerada por objetos Hole
+ */
 public class Breeze extends Entity implements IEntity {
 
     Breeze(Cave cave, int[] position) {

@@ -10,6 +10,9 @@ public class Hero extends Entity implements IEntity {
     private boolean isDead;
     private boolean isBowEngaged;
     private boolean hasGold;
+    private String[] eyeContent;
+    private boolean hasWumpusBattle;
+    private boolean hasKilledWumpus;
 
     Hero(Cave cave, int[] position) {
         super(cave, position);
@@ -17,6 +20,9 @@ public class Hero extends Entity implements IEntity {
         this.isDead = false;
         this.isBowEngaged = false;
         this.hasGold = false;
+        this.eyeContent = new String[]{"", "", ""};
+        this.hasWumpusBattle = false;
+        this.hasKilledWumpus = false;
     }
 
     @Override
@@ -30,10 +36,9 @@ public class Hero extends Entity implements IEntity {
     }
 
     /**
-     * Move o herói pela caverna.
-     *
+     * Wrapper de move(int[]) que determina valores numéricos associados a direção de movimento
      * @param move Código do movimento
-     * @return Verdadeiro se o movimento é válido; Falso caso contrário
+     * @return Valor inteiro informando o acréscimo ou decréscimo de pontuação associado ao movimento
      */
     public int move(char move) {
         int[] displacement;
@@ -49,6 +54,11 @@ public class Hero extends Entity implements IEntity {
         return move(displacement);
     }
 
+    /**
+     * Realiza a movimentação do Herói e suas interações automáticas com objetos da caverna
+     * @param displacement Array binário informando movimento vertical e horizontal
+     * @return Valor inteiro informando o acréscimo ou decréscimo de pontuação associado ao movimento
+     */
     private int move(int[] displacement) {
         int score = 0;
         if (displacement == null) {
@@ -68,29 +78,29 @@ public class Hero extends Entity implements IEntity {
         // Penalidade correspondente ao movimento bem-sucedido
         score -= 15;
 
-        // Remove herói da posição de origem
-        CaveRoom currentRoom = this.cave.getRoom(this.position);
-        currentRoom.removeEntity(this.toString());
+        // Remove Herói da posição de origem
+        this.cave.removeEntity(this.position, this.toString());
 
-        // Adiciona herói à posição de destino
+        // Adiciona Herói à posição de destino
         this.position = targetPos;
-        currentRoom = this.cave.getRoom(this.position);
-        currentRoom.addEntity(this);
-        currentRoom.setVisited();
+        this.cave.addEntity(this.position, this);
+        this.cave.setVisited(this.position);
 
         // Interação com buracos
-        if (currentRoom.getEntity("B") != null) {
+        if (this.cave.getEntity(this.position, "B") != null) {
             this.isDead = true;
-            currentRoom.removeEntity(this.toString());
+            this.cave.removeEntity(this.position, this.toString());
             score -= 1000;
         }
 
         // Interação com Wumpus
-        if (currentRoom.getEntity("W") != null) {
+        if (this.cave.getEntity(this.position, "W") != null) {
+            this.hasWumpusBattle = true;
             Random rand = new Random();
             if (this.isBowEngaged && rand.nextInt(101) >= 50) {
-                currentRoom.removeEntity("W");
+                this.cave.removeEntity(this.position, "W");
                 score += 500;
+                this.hasKilledWumpus = true;
             } else {
                 this.isDead = true;
                 score -= 1000;
@@ -102,7 +112,51 @@ public class Hero extends Entity implements IEntity {
             score -= 100;
         }
 
+        this.setEyeContent();
+
         return score;
+    }
+
+    /**
+     * Detecta os componentes da sala atual e preenche as lacunas de conteúdo
+     * da visão do Herói, possivelmente uma String vazia. O primeiro conteúdo
+     * corresponde ao conteúdo primário, o segundo à brisa, e o terceiro ao fedor.
+     */
+    public void setEyeContent() {
+        CaveRoom currentRoom = this.cave.getRoom(this.position);
+
+        // Detecta o componente primário da sala
+        if (currentRoom.getEntity("O") != null) {
+            this.eyeContent[0] = "Gold";
+        } else if (currentRoom.getEntity("W") != null) {
+            this.eyeContent[0] = "Wumpus";
+        } else if (currentRoom.getEntity("B") != null) {
+            this.eyeContent[0] = "Hole";
+        } else {
+            this.eyeContent[0] = "";
+        }
+
+        // Detecta a presença de brisa
+        if (currentRoom.getEntity("b") != null) {
+            this.eyeContent[1] = "Breeze";
+        } else {
+            this.eyeContent[1] = "";
+        }
+
+        // Detecta a presença de fedor
+        if (currentRoom.getEntity("f") != null) {
+            this.eyeContent[2] = "Stink";
+        } else {
+            this.eyeContent[2] = "";
+        }
+    }
+
+    /**
+     * @return String[] da forma {"A", "B", "C"} informando o componente primário
+     *         e os dois componentes secundários que o Herói possivelmente vê na sala atual
+     */
+    public String[] getEyeContent() {
+        return eyeContent;
     }
 
     public boolean isDead() {
@@ -113,6 +167,10 @@ public class Hero extends Entity implements IEntity {
         if (this.numberOfArrows > 0) {
             isBowEngaged = true;
         }
+    }
+
+    public boolean isBowEngaged() {
+        return this.isBowEngaged;
     }
 
     private boolean fireBow() {
@@ -126,13 +184,26 @@ public class Hero extends Entity implements IEntity {
     }
 
     public void captureGold() {
-        if (this.cave.getRoom(this.position).removeEntity("O") != null) {
+        if (this.cave.getEntity(this.position, "O") != null) {
             this.hasGold = true;
+            this.cave.removeEntity(this.position, "O");
         }
     }
 
     public boolean hasGold() {
         return hasGold;
+    }
+
+    public boolean hasWumpusBattle() {
+        return this.hasWumpusBattle;
+    }
+
+    public void turnOffWumpusBattle() {
+        this.hasWumpusBattle = false;
+    }
+
+    public boolean hasKilledWumpus() {
+        return this.hasKilledWumpus;
     }
 
     public void displayMap() {

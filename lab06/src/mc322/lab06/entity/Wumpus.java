@@ -18,7 +18,10 @@ public class Wumpus extends Entity implements IGeneratorEntity {
     public String toString() {
         return "W";
     }
-
+    
+    /**
+     * Se possível, gera quatro objetos Breeze nas quatro direções cardinais adjacentes na caverna
+     */
     @Override
     public void generate() {
         int[][] displacement = new int[][]{

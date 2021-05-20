@@ -2,10 +2,14 @@ package mc322.lab06;
 
 import mc322.lab06.entity.*;
 
+/**
+ * Classe responsável por gerar objetos Cave válidos a partir de uma matriz de instruções,
+ * em que cada instrução possui a forma {"X:Y", "Z"} especificando coordenadas numéricas X, Y
+ * e um tipo String de entidade Z.
+ */
 public class CaveFactory {
     private final String[][] commands;
     private final int height, width;
-    private Hero hero;
 
     CaveFactory(String csvPath) {
         this(csvPath, 4, 4);
@@ -20,13 +24,26 @@ public class CaveFactory {
         this.width = width;
     }
 
+    /**
+     * @param entityCount Array informando a quantidade de certos objetos Entidade.
+     * @return Retorna um booleano informando se a caverna possui as quantidades apropriadas.
+     */
     private static boolean validateEntityCount(int[] entityCount) {
-        return entityCount[0] >= 2 && entityCount[0] <= 3 &&
-                entityCount[1] == 1 &&
-                entityCount[2] == 1 &&
-                entityCount[3] == 1;
+        int minHoleCount = 2;
+        int maxHoleCount = 3;
+        int wumpusCount = 1;
+        int goldCount = 1;
+        int heroCount = 1;
+        return entityCount[0] >= minHoleCount && entityCount[0] <= maxHoleCount &&
+                entityCount[1] == wumpusCount &&
+                entityCount[2] == goldCount &&
+                entityCount[3] == heroCount;
     }
-
+    
+    /**
+     * Constrói um objeto Cave válido a partir do artibuto 'commands' que especifica a caverna.
+     * @return Retorna o objeto Cave construído.
+     */
     public Cave getCave() {
         Cave newCave = new Cave(height, width);
         EntityFactory entityFactory = new EntityFactory(newCave);
@@ -37,11 +54,13 @@ public class CaveFactory {
         char entityType;
         int[] newEntityCoord;
 
+        // Para cada entrada da especificação da caverna ('commands'), cria e aloca objetos Entity.
         for (String[] command : commands) {
             newEntityCoord = decodeCoordinates(command[0]);
             entityType = command[1].charAt(0);
             newEntity = entityFactory.getEntity(entityType, newEntityCoord);
 
+            // Objetos Hole e Wumpus geram objetos Breeze e Stink ao seu redor.
             switch (entityType) {
                 case 'B' -> {
                     ((Hole) newEntity).generate();
@@ -53,7 +72,7 @@ public class CaveFactory {
                 }
                 case 'O' -> entityCount[2]++;
                 case 'P' -> {
-                    this.hero = (Hero) newEntity;
+                    newCave.setHero((Hero) newEntity);
                     entityCount[3]++;
                 }
             }
@@ -71,10 +90,10 @@ public class CaveFactory {
         }
     }
 
-    public Hero getHero() {
-        return this.hero;
-    }
-
+    /**
+     * @param encodedCoordinates Vetor da forma {"X:Y"}. 
+     * @return Retorna um array de inteiros {X,Y} especificando coordenadas dentro de uma caverna.
+     */
     private int[] decodeCoordinates(String encodedCoordinates) {
         String[] splitCoordinates = encodedCoordinates.split(":");
 
