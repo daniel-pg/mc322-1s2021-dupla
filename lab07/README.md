@@ -24,7 +24,10 @@ Além dessas características, Taalt! ainda possui alguns elementos que distingu
 ### Diagramas
 
 #### Diagrama Geral do Projeto
+![Diagrama Geral do Projeto](assets/Taalt_arq_geral.PNG)
 
 #### Diagrama dos Componentes do Jogo
+![Diagrama Geral do Projeto](assets/Taalt_arq_jogo.PNG)
 
 #### Diagrama dos Componentes da GUI
+![Diagrama Geral do Projeto](assets/Taalt_arq_GUI.PNG)
