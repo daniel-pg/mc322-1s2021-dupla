@@ -17,12 +17,12 @@ Além dessas características, Taalt! ainda possui alguns elementos que distingu
 
 
 ## Vídeos do Projeto
-* [Vídeo da Prévia](assets/Taalt_prévia.mp4)
+* [Vídeo da Prévia](assets/Prévia_Vídeo.mp4)
 
 
 
 ## Slides do Projeto
-* [Slides da Prévia](assets/Taalt_prévia.pdf)
+* [Slides da Prévia](assets/Prévia_Slides.pdf)
 
 
 
@@ -32,30 +32,34 @@ Além dessas características, Taalt! ainda possui alguns elementos que distingu
 
 #### Diagrama Geral do Projeto
 Descrição breve. Estilo arquitetural Model-View-Controller.
-![Diagrama Geral do Projeto](assets/Taalt_arq_geral.png)
+
+![Diagrama Geral do Projeto](assets/Arquitetura_Geral.png)
 
 #### Diagrama dos Componentes do Jogo
 Descrição breve.
-![Diagrama Geral do Projeto](assets/Taalt_arq_jogo.png)
+
+![Diagrama Geral do Projeto](assets/Arquitetura_Jogo.png)
 
 #### Diagrama dos Componentes da GUI
 Descrição breve também, como todas as outras.
-![Diagrama Geral do Projeto](assets/Taalt_arq_GUI.png)
+
+![Diagrama Geral do Projeto](assets/Arquitetura_GUI.png)
 
 
 
 ## Componentes
 
-### Componente `Exemplo1`
-Resumo de papeis e serviços.
-![Exemplo 1](assets/imagem)
+### Componente `GameController`
+Serve como administrador de uma partida de _Taalt!_. Recebe inputs, averigua sua validade, atualiza estatísticas do jogo, e passa o input para o tabuleiro. É construtível.
+
+![GameController](assets/Componente_GameController.PNG)
 
 **Ficha Técnica**
 item | detalhamento
 ----- | -----
-Classe | `lab07.src.bin.Exemplo1`
+Classe | `lab07.src.bin.GameController`
 Autores | `Grupo Daniel x Daniel`
-Interfaces | `IExemplo1, IExemplo2, IExemplo3`
+Interfaces | `IGameControl, IGameView, IGameBuild, IRBoardAction`
 
 **Interfaces associadas**
 ![Diagrama Interfaces](assets/imagem)
