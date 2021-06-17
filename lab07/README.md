@@ -57,15 +57,62 @@ item | detalhamento
 ----- | -----
 Classe | `lab07.src.bin.GameController`
 Autores | `Grupo Daniel x Daniel`
-Interfaces | `IGameControl, IGameView, IGameBuild, IRBoardAction`
+Interfaces | `IGameBuilder, IGameAction, IGameView, UpdateView`
 
 **Interfaces associadas**
-![Diagrama Interfaces](assets/imagem)
 Interface agregadora do componente em Java:
 ~~~java
-public interface IExemplo3 extends IExemplo1, IExemplo2 {
+public interface IGame extends IGameBuilder, IGameAction, IGameView, UpdateView {
 }
 ~~~
+
+## Detalhamento das Interfaces (Game Controller)
+### Interface `IGameBuilder`
+Permite a inicialização de GameController.
+~~~java
+public interface IExemplo1 {
+  Board build(Options input);
+}
+~~~
+Método | Objetivo
+-------| --------
+`build` | `Recebe um objeto Options com as especificações de uma partida. Chama GameBuilder e retorna o que ele retornar.`
+
+### Interface `IGameAction`
+Permite a entrada de um input.
+~~~java
+public interface IExemplo1 {
+  void command(Input input);
+}
+~~~
+Método | Objetivo
+-------| --------
+`command` | `Recebe um objeto Input especificando uma tentativa de jogada.`
+
+### Interface `IGameView`
+Resumo do papel da interface.
+~~~java
+public interface IExemplo1 {
+  int método1();
+}
+~~~
+Método | Objetivo
+-------| --------
+`método1` | `Objetivos e parâmetros`
+`método2` | `Objetivos e parâmetros`
+
+### Interface `UpdateView`
+Resumo do papel da interface.
+~~~java
+public interface IExemplo1 {
+  int método1();
+  boolean método2();
+}
+~~~
+Método | Objetivo
+-------| --------
+`método1` | `Objetivos e parâmetros`
+`método2` | `Objetivos e parâmetros`
 
 
 ### Componente `Window`
@@ -75,7 +122,7 @@ Este componente possui um controlador principal WindowManager que administra a c
 **Ficha Técnica**
 item | detalhamento
 ----- | -----
-Classe | `lab07.src.bin.Exemplo2`
+Classe | `lab07.src.bin.Window`
 Autores | `Grupo Daniel x Daniel`
 Interfaces | `IExemplo4, IExemplo5, IExemplo6`
 
@@ -90,18 +137,6 @@ public interface IExemplo4 extends IExemplo5, IExemplo6 {
 
 
 ## Detalhamento das Interfaces
-### Interface `IExemplo1`
-Resumo do papel da interface.
-~~~java
-public interface IExemplo1 {
-  int método1();
-  boolean método2();
-}
-~~~
-Método | Objetivo
--------| --------
-`método1` | `Objetivos e parâmetros`
-`método2` | `Objetivos e parâmetros`
 
 ### Interface `IExemplo2`
 Resumo do papel da interface.
