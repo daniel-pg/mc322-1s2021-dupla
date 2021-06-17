@@ -47,7 +47,7 @@ Gerencia e atualiza o estado atual do jogo.
 #### Diagrama dos Componentes de GameClient
 Visualização da partida, interface de input, e controlador de janelas.
 
-![Diagrama dos Componentes de GameClient](assets/Arquitetura_Window.png)
+![Diagrama dos Componentes de GameClient](assets/Arquitetura_GameClient.png)
 
 
 
