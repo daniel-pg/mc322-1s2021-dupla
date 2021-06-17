@@ -31,17 +31,17 @@ Além dessas características, Taalt! ainda possui alguns elementos que distingu
 ### Diagramas
 
 #### Diagrama Geral do Projeto
-Descrição breve. Estilo arquitetural Model-View-Controller.
+Tentamos empregar o estilo arquitetural Model-View-Controller. Existem elementos controladores dentro dos componentes Window (responsável pela visualização) e GameController (responsável pelo modelo). Este segundo componente é projetado para que funcione de maneira completamente independente de um componente gráfico, sendo portanto acoplável a qualquer outro modo de visualização.
 
 ![Diagrama Geral do Projeto](assets/Arquitetura_Geral.png)
 
-#### Diagrama dos Componentes do Jogo
-Descrição breve.
+#### Diagrama dos Componentes de GameController
+Modelo e controle da partida.
 
 ![Diagrama Geral do Projeto](assets/Arquitetura_Jogo.png)
 
-#### Diagrama dos Componentes da GUI
-Descrição breve também, como todas as outras.
+#### Diagrama dos Componentes de Window
+Visualização da partida, interface de input, e controlador de janelas.
 
 ![Diagrama Geral do Projeto](assets/Arquitetura_GUI.png)
 
@@ -50,9 +50,7 @@ Descrição breve também, como todas as outras.
 ## Componentes
 
 ### Componente `GameController`
-Serve como administrador de uma partida de _Taalt!_. Recebe inputs, averigua sua validade, atualiza estatísticas do jogo, e passa o input para o tabuleiro. É construtível.
-
-![GameController](assets/Componente_GameController.PNG)
+Este componente possui um controlador principal GameController que administra a criação do componente Board, por meio da classe GameBuilder, e também gerencia algumas operações de I/O. Um sistema externo qualquer pode realizar entrada de inputs pela interface IGameActon, tal como pode requerer informações do jogo via IGameView. O componente GameController admite de observadores (listeners) que serão avisados automaticamente de quaisquer mudanças no estado interno do jogo, via UpdateView. Por fim, GameController é criado por um sistema externo via IGameBuilder.
 
 **Ficha Técnica**
 item | detalhamento
@@ -70,8 +68,8 @@ public interface IExemplo3 extends IExemplo1, IExemplo2 {
 ~~~
 
 
-### Componente `Exemplo2`
-Resumo de papeis e serviços.
+### Componente `Window`
+Este componente possui um controlador principal WindowManager que administra a criação e exibição das janelas MainMenu, onde o usuário insere opções e pode inicializar o jogo, e GameScreen, onde uma partida é exibida e na qual se pode interagir com o tabuleiro. WindowManager serve como ponto de entrada de nosso programa, e por meio de sua interface é possível criar um jogo via IGameBuilder. Inputs serão inseridos via IGameAction e atualizações sobre o tabuleiro serão sinalizadas via UpdateView e obtidas via IGameView.
 ![Exemplo 2](assets/imagem)
 
 **Ficha Técnica**
