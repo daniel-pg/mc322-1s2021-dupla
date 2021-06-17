@@ -31,16 +31,16 @@ Além dessas características, Taalt! ainda possui alguns elementos que distingu
 ### Diagramas
 
 #### Diagrama Geral do Projeto
-Tentamos empregar o estilo arquitetural Model-View-Controller. Existem elementos controladores dentro dos componentes Window (responsável pela visualização) e GameController (responsável pelo modelo). Este segundo componente é projetado para que funcione de maneira completamente independente de um componente gráfico, sendo portanto acoplável a qualquer outro modo de visualização.
+Tentamos empregar o estilo arquitetural Model-View-Controller. Existem elementos controladores e visuais dentro do componente GameClient (responsável pela visualização do jogo e por enviar comandos do usuário), enquanto que o componente GameServer é responsável pelo modelo. Este segundo componente é projetado para funcionar de maneira completamente independente de um componente gráfico, sendo portanto acoplável a qualquer outro modo de visualização.
 
 ![Diagrama Geral do Projeto](assets/Arquitetura_Geral.png)
 
-#### Diagrama dos Componentes de GameController
-Modelo e controle da partida.
+#### Diagrama dos Componentes de GameServer
+Gerencia e atualiza o estado atual do jogo.
 
 ![Diagrama Geral do Projeto](assets/Arquitetura_Jogo.png)
 
-#### Diagrama dos Componentes de Window
+#### Diagrama dos Componentes de GameClient
 Visualização da partida, interface de input, e controlador de janelas.
 
 ![Diagrama Geral do Projeto](assets/Arquitetura_GUI.png)
@@ -49,26 +49,26 @@ Visualização da partida, interface de input, e controlador de janelas.
 
 ## Componentes
 
-### Componente `GameController`
-Este componente possui um controlador principal GameController que administra a criação do componente Board, por meio da classe GameBuilder, e também gerencia algumas operações de I/O. Um sistema externo qualquer pode realizar entrada de inputs pela interface IGameActon, tal como pode requerer informações do jogo via IGameView. O componente GameController admite de observadores (listeners) que serão avisados automaticamente de quaisquer mudanças no estado interno do jogo, via UpdateView. Por fim, GameController é criado por um sistema externo via IGameBuilder.
+### Componente `GameServer`
+Este componente possui uma classe principal GameServer que administra as operações recebidas do usuário. Um componente externo tanto pode enviar comandos pela interface IGameAction, quanto também requerer informações do jogo via IGameView. O componente GameServer admite observadores (listeners) que serão avisados automaticamente de quaisquer mudanças no estado interno do jogo, via interface requerida IUpdateView. Por fim, GameServer é criado com auxílio da classe GameBuilder através da interface IGameBuilder.
 
 **Ficha Técnica**
 item | detalhamento
 ----- | -----
-Classe | `lab07.src.bin.GameController`
+Classe | `gameserver.GameServer`
 Autores | `Grupo Daniel x Daniel`
-Interfaces | `IGameBuilder, IGameAction, IGameView, UpdateView`
+Interfaces | `IGameBuilder, IGameAction, IGameView, IUpdateView`
 
 **Interfaces associadas**
 Interface agregadora do componente em Java:
 ~~~java
-public interface IGame extends IGameBuilder, IGameAction, IGameView, UpdateView {
+public interface IGame extends IGameBuilder, IGameAction, IGameView, IUpdateView {
 }
 ~~~
 
 ## Detalhamento das Interfaces (Game Controller)
 ### Interface `IGameBuilder`
-Permite a inicialização de GameController.
+Permite a inicialização de GameServer.
 ~~~java
 public interface IGameBuilder {
   Board build(Options input);
@@ -100,10 +100,10 @@ Método | Objetivo
 -------| --------
 `getCell` | `Recebe as coordenadas de uma célula e devolve informações sobre ela e sobre o estado atual do jogo, encapsuladas num objeto Output.`
 
-### Interface `UpdateView`
+### Interface `IUpdateView`
 Resumo do papel da interface.
 ~~~java
-public interface UpdateView {
+public interface IUpdateView {
   void addUpdateListener(UpdateListener listener);
   void notify();
 }
@@ -114,14 +114,15 @@ Método | Objetivo
 `notify` | `Notifica os observadores que uma atualização interna ocorreu.`
 
 
-### Componente `Window`
-Este componente possui um controlador principal WindowManager que administra a criação e exibição das janelas MainMenu, onde o usuário insere opções e pode inicializar o jogo, e GameScreen, onde uma partida é exibida e na qual se pode interagir com o tabuleiro. WindowManager serve como ponto de entrada de nosso programa, e por meio de sua interface é possível criar um jogo via IGameBuilder. Inputs serão inseridos via IGameAction e atualizações sobre o tabuleiro serão sinalizadas via UpdateView e obtidas via IGameView.
+### Componente `GameClient`
+Este componente possui um controlador principal 
+Manager que administra a criação e exibição das janelas MainMenu, onde o usuário insere opções e pode inicializar o jogo, e GameScreen, onde uma partida é exibida e na qual se pode interagir com o tabuleiro. WindowManager serve como ponto de entrada de nosso programa, e por meio de sua interface é possível criar um jogo via IGameBuilder. Inputs serão inseridos via IGameAction e atualizações sobre o tabuleiro serão sinalizadas via IUpdateView e obtidas via IGameView.
 ![Exemplo 2](assets/imagem)
 
 **Ficha Técnica**
 item | detalhamento
 ----- | -----
-Classe | `lab07.src.bin.Window`
+Classe | `gameclient.Window`
 Autores | `Grupo Daniel x Daniel`
 Interfaces | `IExemplo4, IExemplo5, IExemplo6`
 
