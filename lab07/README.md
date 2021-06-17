@@ -29,12 +29,12 @@ Além dessas características, Taalt! ainda possui alguns elementos que distingu
 ### Diagramas
 
 #### Diagrama Geral do Projeto
-Tentamos empregar o estilo arquitetural Model-View-Controller, estando View e Controller dentro do componente Jogo.
+Tentamos empregar um misto dos estilos arquiteturais Cliente-Servidor (como mostra a figura) e do Model-View-Controller, ficando View e Controller a cargo da Interface do Usuário, enquanto que o Model é gerido pelo servidor do Jogo.
 
 ![Diagrama Geral do Projeto](assets/Arquitetura_Geral.png)
 
 #### Diagrama Geral dos Componentes
-O componente GameClient é responsável pela visualização do jogo e por enviar comandos do usuário. Já no componente GameServer há elementos de modelo e de controle. GameServer é projetado para funcionar de maneira completamente independente de um componente gráfico, sendo portanto acoplável a qualquer outro modo de visualização.
+O componente GameClient é responsável pela visualização do jogo e por enviar comandos do usuário. Já no componente GameServer há elementos do modelo do jogo. GameServer é projetado para funcionar de maneira completamente independente de um componente gráfico, sendo portanto acoplável a qualquer outro modo de visualização.
 ![Diagrama Geral dos Componentes](assets/Arquitetura_Componentes.png)
 
 #### Diagrama dos Componentes de GameServer
@@ -52,7 +52,7 @@ Visualização da partida, interface de input, e controlador de janelas.
 ## Componentes
 
 ### Componente `GameServer`
-Este componente possui uma classe principal Game que administra as operações recebidas do usuário. Um componente externo tanto pode enviar comandos pela interface IGameAction, quanto também requerer informações do jogo via IGameView. A classe admite observadores (listeners) que serão avisados automaticamente de quaisquer mudanças no estado interno do jogo, via interface requerida IUpdateView. Por fim, Game é criado com auxílio da classe GameBuilder, chamada com informação de opções de usuário através da interface IGameBuilder.
+Este componente possui uma classe principal Game que administra as operações recebidas do usuário. Um componente externo tanto pode enviar comandos pela interface IGameAction, quanto também requerer informações do jogo via IGameView. O componente admite observadores (observers/listeners) que serão avisados automaticamente de quaisquer mudanças no estado interno do jogo, via interface requerida IUpdateView. Por fim, Game é criado recebendo informações das opções da partida através da interface IGameBuilder.
 
 **Ficha Técnica**
 item | detalhamento
@@ -73,12 +73,12 @@ public interface IGame extends IGameBuilder, IGameAction, IGameView {
 Permite a inicialização de GameServer.
 ~~~java
 public interface IGameBuilder {
-  Board build(Options input);
+  void build(Options input);
 }
 ~~~
 Método | Objetivo
 -------| --------
-`build` | `Recebe um objeto Options com as especificações de uma partida. Chama GameBuilder e retorna o que ele retornar.`
+`build` | `Recebe um objeto Options com as especificações da partida e constrói os objetos necessários.`
 
 ### Interface `IGameAction`
 Permite a entrada de um input.
@@ -105,7 +105,7 @@ Método | Objetivo
 
 
 ### Componente `GameClient`
-Este componente possui uma classe WindowManager que administra a criação e exibição das janelas MainMenu, onde o usuário insere opções e pode inicializar o jogo, e GameScreen, onde uma partida é exibida e na qual se pode interagir com o tabuleiro. WindowManager serve como ponto de entrada de nosso programa, e por meio de sua interface é possível criar um jogo via IGameBuilder. Inputs serão inseridos via IGameAction e atualizações sobre o tabuleiro serão sinalizadas via IUpdateView e obtidas via IGameView.
+Este componente possui uma classe WindowManager que administra a criação e exibição das janelas MainMenu, onde o usuário insere opções e pode inicializar o jogo, e GameScreen, onde uma partida é exibida e na qual se pode interagir com o tabuleiro. WindowManager serve como ponto de entrada de nosso programa, e por meio da interface requerida IGameBuilder é possível criar um jogo. Inputs serão inseridos via IGameAction e atualizações sobre o tabuleiro serão sinalizadas via IUpdateView e obtidas via IGameView.
 ![Exemplo 2](assets/imagem)
 
 **Ficha Técnica**
@@ -121,14 +121,12 @@ Interfaces | `IUpdateView`
 Resumo do papel da interface.
 ~~~java
 public interface IUpdateView {
-  void addUpdateListener(UpdateListener listener);
   void notify();
 }
 ~~~
 Método | Objetivo
 -------| --------
-`addUpdateListener` | `Adiciona um objeto UpdateListener à lista de observadores.`
-`notify` | `Notifica os observadores que uma atualização interna ocorreu.`
+`notify` | `Notifica os observadores (tabuleiro e suas células) que uma atualização interna ocorreu.`
 
 
 
