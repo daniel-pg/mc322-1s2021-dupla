@@ -70,7 +70,7 @@ public interface IGame extends IGameBuilder, IGameAction, IGameView, UpdateView 
 ### Interface `IGameBuilder`
 Permite a inicialização de GameController.
 ~~~java
-public interface IExemplo1 {
+public interface IGameBuilder {
   Board build(Options input);
 }
 ~~~
@@ -81,7 +81,7 @@ Método | Objetivo
 ### Interface `IGameAction`
 Permite a entrada de um input.
 ~~~java
-public interface IExemplo1 {
+public interface IGameAction {
   void command(Input input);
 }
 ~~~
@@ -92,27 +92,26 @@ Método | Objetivo
 ### Interface `IGameView`
 Resumo do papel da interface.
 ~~~java
-public interface IExemplo1 {
-  int método1();
+public interface IGameView {
+  Output getCell(int row, int col);
 }
 ~~~
 Método | Objetivo
 -------| --------
-`método1` | `Objetivos e parâmetros`
-`método2` | `Objetivos e parâmetros`
+`getCell` | `Recebe as coordenadas de uma célula e devolve informações sobre ela e sobre o estado atual do jogo, encapsuladas num objeto Output.`
 
 ### Interface `UpdateView`
 Resumo do papel da interface.
 ~~~java
-public interface IExemplo1 {
-  int método1();
-  boolean método2();
+public interface UpdateView {
+  void addUpdateListener(UpdateListener listener);
+  void notify();
 }
 ~~~
 Método | Objetivo
 -------| --------
-`método1` | `Objetivos e parâmetros`
-`método2` | `Objetivos e parâmetros`
+`addUpdateListener` | `Adiciona um objeto UpdateListener à lista de observadores.`
+`notify` | `Notifica os observadores que uma atualização interna ocorreu.`
 
 
 ### Componente `Window`
@@ -156,7 +155,7 @@ Método | Objetivo
 ## Plano de Exceções
 
 ### Diagrama da hierarquia de exceções
-![Hierarquia Exceções](assets/imagem)
+![Arquitetura de Exceções](assets/Arquitetura_Exceções.png)
 
 ### Descrição das classes de exceção
 Classe | Descrição
