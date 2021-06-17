@@ -161,6 +161,12 @@ Método | Objetivo
 ### Descrição das classes de exceção
 Classe | Descrição
 ----- | -----
-Exceção1 | Engloba tal coisa.
-Exceção2 | Indica tal coisa.
-Exceção3 | Cobre tal caso.
+GameException | Abarca todas as exceções relacionadas ao servidor do jogo (exceto interface gráfica).
+InvalidMoveException | Indica tentativa inválida de jogada por parte do jogador.
+InvalidRequestException | Indica requisição inválida de informações do jogo por parte da interface gráfica.
+InvalidGameException | Engloba todas as exceções relacionadas à configuração da partida.
+InvalidNumberOfPlayersException | Indica quantia selecionada inválida de jogadores.
+InvalidBoardDimensionException | Indica dimensão selecionada inválida de tabuleiro.
+InvalidSaveFileException | Indica que o _save file_ está corrompido.
+InvalidPlayerException | Indica que o jogador não está configurado adequadamente.
+InvalidPieceException | Indica que a peça não está configurada adequadamente.
