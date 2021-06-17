@@ -15,10 +15,8 @@ Além dessas características, Taalt! ainda possui alguns elementos que distingu
 * Daniel Paulo Garcia
 
 
-
 ## Vídeos do Projeto
 * [Vídeo da Prévia](assets/Prévia_Vídeo.mp4)
-
 
 
 ## Slides do Projeto
