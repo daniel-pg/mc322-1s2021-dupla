@@ -35,15 +35,19 @@ Tentamos empregar o estilo arquitetural Model-View-Controller. Existem elementos
 
 ![Diagrama Geral do Projeto](assets/Arquitetura_Geral.png)
 
+#### Diagrama Geral dos Componentes
+
+![Diagrama Geral dos Componentes](assets/Arquitetura_Componentes.png)
+
 #### Diagrama dos Componentes de GameServer
 Gerencia e atualiza o estado atual do jogo.
 
-![Diagrama Geral do Projeto](assets/Arquitetura_Jogo.png)
+![Diagrama dos Componentes de GameServer](assets/Arquitetura_GameServer.png)
 
 #### Diagrama dos Componentes de GameClient
 Visualização da partida, interface de input, e controlador de janelas.
 
-![Diagrama Geral do Projeto](assets/Arquitetura_GUI.png)
+![Diagrama dos Componentes de GameClient](assets/Arquitetura_Window.png)
 
 
 
