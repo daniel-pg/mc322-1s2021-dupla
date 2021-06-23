@@ -2,7 +2,7 @@ package gameserver;
 
 import java.awt.*;
 
-public class Board {
+public class Board implements IContentProducerViewer {
     int successiveCellsToWin;
     int rows, cols;
     Cell[][] matrix;
@@ -17,6 +17,12 @@ public class Board {
                 this.matrix[row][col] = new Cell();
             }
         }
+    }
+
+    // Implementa métodos de IContentProducerViewer
+    @Override
+    public IContentProducer getContentProducer(Point pos) {
+        return this.getCell(pos);
     }
 
     public boolean insideBoard(Point pos) {

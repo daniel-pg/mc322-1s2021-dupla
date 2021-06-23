@@ -5,6 +5,11 @@ import gameserver.Output;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ *  Visualização dos dados do jogo atual: número total de jogadores,
+ *  número da rodada atual, e nome do jogador da vez. Componente visual
+ *  não-interativo de GUIGameScreen.
+ */
 public class GUIGameStatus extends JPanel {
     int numPlayers;
     int rounds;
@@ -34,6 +39,7 @@ public class GUIGameStatus extends JPanel {
         this.add(this.currentPlayerLabel);
     }
 
+    /** Atualiza os mostradores com novas informações. */
     public void update(Output output) {
         this.numPlayers = output.getNumPlayers();
         this.rounds = output.getRounds();

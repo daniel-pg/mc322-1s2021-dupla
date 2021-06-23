@@ -9,8 +9,16 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+/**
+ *  Interface gráfica para inserir as opções de jogo e inicializá-lo.
+ *
+ *  Contém quatro componentes que herdam de JPanel, cada um responsável por coletar um tipo de opção de jogo.
+ *  Os componentes são definidos como inner classes. Por implementarem IOptionsProducer, armazena referência
+ *  a implementadores de IOptionsReceiver e os envia objetos Option quando "fireOptions()" é chamada.
+ */
+
 public class GUIMainMenu extends JPanel implements IOptionsProducer {
-    IOptionsReceiver optionsReceiver;
+    ArrayList<IOptionsReceiver> optionsReceiverList;
     Options options;
     JButton start;
 
@@ -20,66 +28,83 @@ public class GUIMainMenu extends JPanel implements IOptionsProducer {
         this.setLayout(new GridLayout(5, 1, 0, 50));
         JLabel titleScreen = new JLabel(new ImageIcon("assets/titlescreen200x60.png"));
         this.add(titleScreen);
-        this.add(new InputPlayer());
-        this.add(new InputMNK());
-        this.add(new InputGravity());
-        this.add(new StartButton());
+        this.add(new InputPlayer(this));
+        this.add(new InputMNK(this));
+        this.add(new InputGravity(this));
+        this.add(new StartButton(this));
     }
 
+    /** Implementa métodos de IOptionsProducer. */
     @Override
-    public void addOptionsListener(IOptionsReceiver listener) {
-        this.optionsReceiver = listener;
+    public void addOptionsReceiver(IOptionsReceiver optionsReceiver) {
+        this.optionsReceiverList.add(optionsReceiver);
     }
 
     @Override
     public void fireOptions(Options options) {
-        this.optionsReceiver.listenOptions(options);
+        for (IOptionsReceiver optionsReceiver : this.optionsReceiverList) {
+            optionsReceiver.receiveOptions(options);
+        }
     }
 
-
+    /**
+     *  Componente Swing contendo um JComboBox para escolher o número de jogadores
+     *  da partida, dentre alternativas pré-determinadas. Toda vez que o usuário
+     *  selecionar um número de jogadores, "JComboBox.actionPerformed()" alterará
+     *  o objeto Options armazenado na variável de instância "GUIMainMenu.options".
+     */
     class InputPlayer extends JPanel implements ActionListener {
-        InputPlayer() {
+        GUIMainMenu outer;
+
+        InputPlayer(GUIMainMenu outer) {
             super();
+            this.outer = outer;
             this.setLayout(new GridLayout(1, 2));
+
             JLabel label= new JLabel("Choose the amount of players: ");
+            this.add(label);
+
             JComboBox<String> box = new JComboBox<>(new String[]{"2", "3", "4"});
             box.addActionListener(this);
-            this.add(label);
             this.add(box);
         }
 
+        // TODO: Se livrar desse problema de unchecked casting.
+        /** Implementa método de JComboBox. */
         @Override
         public void actionPerformed(ActionEvent e) {
             @SuppressWarnings("unchecked")
             JComboBox<String> box = (JComboBox<String>) e.getSource();
             String selectedItem = (String) box.getSelectedItem();
             assert selectedItem != null;
-            options.setPlayers(Integer.parseInt(selectedItem));
+            int numPlayers = Integer.parseInt(selectedItem);
+            options.setNumPlayers(numPlayers);
         }
     }
 
-
-    class InputMNK extends JPanel implements ChangeListener {
+    /**
+     *  Componente Swing contendo três JSliders para escolher os parâmetros m, n, k do jogo.
+     *  Toda vez que o usuário altera a posição do cabeçote de um JSlider, "JSlider.stateChanged()"
+     *  alterará o objeto Options armazenado na variável de instância "GUIMainMenu.options".
+     */
+    private class InputMNK extends JPanel implements ChangeListener {
+        GUIMainMenu outer;
         JLabel label;
-        JSlider mSlider;
-        JSlider nSlider;
-        JSlider kSlider;
+        JSlider mSlider, nSlider, kSlider;
 
-        InputMNK() {
+        InputMNK(GUIMainMenu outer) {
             super();
+            this.outer = outer;
             this.setLayout(new GridLayout(4, 1));
 
+            this.mSlider = new JSlider(3, 10, 3);
+            this.nSlider = new JSlider(3, 10, 3);
+            this.kSlider = new JSlider(3, 10, 3);
+
             ArrayList<JSlider> sliderList = new ArrayList<JSlider>();
-            mSlider = new JSlider(3, 10, 3);
-            sliderList.add(mSlider);
-            nSlider = new JSlider(3, 10, 3);
-            sliderList.add(nSlider);
-            kSlider = new JSlider(3, 10, 3);
-            sliderList.add(kSlider);
-
-            label= new JLabel("Values for m, n, k: " + mSlider.getValue() + ", " + nSlider.getValue() + ", " + kSlider.getValue());
-            this.add(label);
-
+            sliderList.add(this.mSlider);
+            sliderList.add(this.nSlider);
+            sliderList.add(this.kSlider);
             for (JSlider slider: sliderList) {
                 slider.setPaintTicks(true);
                 slider.setMinorTickSpacing(10);
@@ -88,24 +113,35 @@ public class GUIMainMenu extends JPanel implements IOptionsProducer {
                 slider.addChangeListener(this);
                 this.add(slider);
             }
+
+            this.label = new JLabel("Values for m, n, k: " + mSlider.getValue() + ", " + nSlider.getValue() + ", " + kSlider.getValue());
+            this.add(label);
         }
 
+        /** Implementa método de JSlider. */
         @Override
         public void stateChanged(ChangeEvent e) {
             this.label.setText("Values for m, n, k: " + mSlider.getValue() + ", " + nSlider.getValue() + ", " + kSlider.getValue());
+            Options outerOptions = this.outer.options;
             if (e.getSource() == mSlider) {
-                options.setM(mSlider.getValue());
+                outerOptions.setM(mSlider.getValue());
             } else if (e.getSource() == nSlider) {
-                options.setN(nSlider.getValue());
+                outerOptions.setN(nSlider.getValue());
             } else {
-                options.setK(kSlider.getValue());
+                outerOptions.setK(kSlider.getValue());
             }
         }
     }
 
+    /**
+     *  Componente Swing contendo um JTtogleButton para ativar ou desativar o modo gravidade.
+     *  Toda vez que o usuário altera o toggle, "JToggleButton.itemStateChanged()" alterará
+     *  o objeto Options armazenado na variável de instância "GUIMainMenu.options".
+     */
+    private class InputGravity extends JPanel implements ItemListener {
+        GUIMainMenu outer;
 
-    class InputGravity extends JPanel implements ItemListener {
-        InputGravity() {
+        InputGravity(GUIMainMenu outer) {
             super();
             this.setLayout(new GridLayout(1, 2));
             JLabel label = new JLabel("Gravity mode: ");
@@ -115,27 +151,33 @@ public class GUIMainMenu extends JPanel implements IOptionsProducer {
             this.add(toggle);
         }
 
+        /** Implementa método de JSlider. */
         @Override
         public void itemStateChanged(ItemEvent e) {
             boolean gravityMode = (e.getStateChange() == ItemEvent.SELECTED);
-            options.setGravity(gravityMode);
+            options.setGravityMode(gravityMode);
         }
     }
 
-
-    class StartButton extends JPanel implements ActionListener {
+    /**
+     *  Componente Swing contendo um JButton para iniciar o jogo. Quando o usuário clica o botão,
+     *  o método sobrescrito "JButton.actionPerformed()" chamará o método "GUIMainMenu.fireOptions()".
+     */
+    private class StartButton extends JPanel implements ActionListener {
+        GUIMainMenu outer;
         JButton button;
 
-        StartButton() {
+        StartButton(GUIMainMenu outer) {
             super();
             this.button = new JButton("Start");
             button.addActionListener(this);
             this.add(button);
         }
 
+        /** Implementa método de JButton. */
         @Override
         public void actionPerformed(ActionEvent e) {
-            fireOptions(options);
+            this.outer.fireOptions(options);
         }
     }
 

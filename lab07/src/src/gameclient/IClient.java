@@ -1,7 +1,9 @@
 package gameclient;
 
-import gameserver.InputListenable;
-import gameserver.OutputListener;
+import gameserver.IInputProducer;
+import gameserver.IOutputReceiver;
 
-public interface IClient extends InputListenable, OutputListener {
+/** Interface acumuladora que o servidor usará para interagir com o cliente. */
+
+public interface IClient extends IInputProducer, IOutputReceiver {
 }

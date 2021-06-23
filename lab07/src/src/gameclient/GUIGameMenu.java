@@ -3,6 +3,10 @@ package gameclient;
 import javax.swing.*;
 import java.awt.*;
 
+// TODO: Implementar funcionalidades.
+/**
+ *  Menu interativo inserido em GUIGameScreen.
+ */
 public class GUIGameMenu extends JPanel {
     GUIGameMenu(int width, int height) {
         this.setPreferredSize(new Dimension(width, height));

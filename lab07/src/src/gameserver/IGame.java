@@ -1,4 +1,4 @@
 package gameserver;
 
-public interface IGame extends InputListener, OutputListenable, IContentProducerViewer {
+public interface IGame extends IInputReceiver, IOutputProducer, IContentProducerViewer {
 }

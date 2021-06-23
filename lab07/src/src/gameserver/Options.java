@@ -3,27 +3,27 @@ package gameserver;
 import java.util.ArrayList;
 
 public class Options {
-    int players;
+    int numPlayers;
     ArrayList<String> names;
     int m;
     int n;
     int k;
-    boolean gravity;
+    boolean gravityMode;
 
     public Options() {
-        this.players = 2;
+        this.numPlayers = 2;
         this.names = new ArrayList<String>();
         this.m = 3;
         this.n = 3;
         this.k = 3;
-        this.gravity = false;
+        this.gravityMode = false;
     }
 
-    public void setPlayers(int players) {
-        this.players = players;
+    public void setNumPlayers(int numPlayers) {
+        this.numPlayers = numPlayers;
     }
 
-    public void addName(String name) {
+    public void addPlayerName(String name) {
         this.names.add(name);
     }
 
@@ -39,16 +39,16 @@ public class Options {
         this.k = k;
     }
 
-    public void setGravity(boolean gravity) {
-        this.gravity = gravity;
+    public void setGravityMode(boolean gravityMode) {
+        this.gravityMode = gravityMode;
     }
 
-    public String getName(int index) {
+    public String getPlayerName(int index) {
         return this.names.get(index);
     }
 
-    public int getPlayers() {
-        return this.players;
+    public int getNumPlayers() {
+        return this.numPlayers;
     }
 
     public int getM() {
@@ -63,7 +63,7 @@ public class Options {
         return this.k;
     }
 
-    public boolean getGravity() {
-        return this.gravity;
+    public boolean getGravityMode() {
+        return this.gravityMode;
     }
 }

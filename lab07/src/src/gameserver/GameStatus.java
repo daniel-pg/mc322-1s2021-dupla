@@ -11,11 +11,11 @@ public class GameStatus {
     GameCondition condition;
 
     public GameStatus(Options options) {
-        this.totalPlayers = options.getPlayers();
+        this.totalPlayers = options.getNumPlayers();
         this.currentPlayer = PlayerID.ONE;
         this.rounds = 1;
         this.playerList = new ArrayList<Player>();
-        this.gravityMode = options.getGravity();
+        this.gravityMode = options.getGravityMode();
         this.condition = GameCondition.START;
 
         for (int playerID = 1; playerID <= totalPlayers; playerID++) {
