@@ -93,14 +93,17 @@ Método | Objetivo
 
 ### Interface `IGameView`
 Resumo do papel da interface.
+
 ~~~java
+import gameserver.Output;
+
 public interface IGameView {
-  Output getCell(Point pos);
+    Output getCell(Point pos);
 }
 ~~~
 Método | Objetivo
 -------| --------
-`getCell` | `Recebe as coordenadas de uma célula e devolve informações sobre ela e sobre o estado atual do jogo, encapsuladas num objeto Output.`
+`getCell` | `Recebe as coordenadas de uma célula e devolve informações sobre ela e sobre o estado atual do jogo, encapsuladas num objeto gameserver.Output.`
 
 
 

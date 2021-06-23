@@ -1,1 +1,1 @@
-.class binary files
+.java source files
